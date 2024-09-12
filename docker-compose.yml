@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data/beacon-kit:/app/data/beacon-kit
+    env_file:
+      - .env
+
+  beacond:
+    image: ubuntu:24.04
+    restart: unless-stopped
+    stop_grace_period: 5m
+    volumes:
+      - ./data/beacon-kit:/app/data/beacon-kit
+      - ./beacond/entry.sh:/app/entrypoint.sh
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"
+      - "8545:8545"
+      - "26657:26657"
+      - "8547:8547"
+      - "7300:7300"
+      - "9221:9221/udp"
+      - "9221:9221/tcp"
+    entrypoint: /app/entrypoint.sh
+
+  reth:
+    image: ubuntu:24.04
+    restart: unless-stopped
+    stop_grace_period: 5m
+    volumes:
+      - ./data/beacon-kit:/app/data/beacon-kit
+      - ./reth/entry.sh:/app/entrypoint.sh
+    env_file:
+      - .env
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+      - "6060:6060"
+      - "30333:30333/udp"
+      - "30333:30333/tcp"
+    entrypoint: /app/entrypoint.sh
