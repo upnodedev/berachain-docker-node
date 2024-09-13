@@ -48,7 +48,7 @@ handle_snapshot() {
 
   mkdir -p "$BEACOND_SNAPSHOT_TEMP"
   lz4 -dc < "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT" | tar xvf - -C "$BEACOND_SNAPSHOT_TEMP"
-  mv "$BEACOND_SNAPSHOT_TEMP/data/*" "$BEACOND_DATA_DIR"
+  mv "$BEACOND_SNAPSHOT_TEMP"/data/* "$BEACOND_DATA_DIR"
 }
 
 prepare_reth() {

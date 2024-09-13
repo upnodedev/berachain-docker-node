@@ -25,7 +25,7 @@ RUN foundryup -v ${FOUNDRY_VERSION}
 
 WORKDIR /app
 
-COPY scripts/entrypoints/build.sh /app/build.sh
+COPY entrypoints/build.sh /app/build.sh
 COPY scripts/utils.sh /app/scripts/utils.sh
 RUN chmod +x /app/build.sh
 
