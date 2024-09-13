@@ -6,7 +6,7 @@ ENV GO_VERSION 1.23.1
 ENV FOUNDRY_VERSION nightly-d663f38be3114ccb94f08fe3b8ea26e27e2043c1
 
 RUN apt-get update && \
-    apt-get install -y git make jq curl wget build-essential pkg-config libssl-dev openssl ca-certificates unzip gnupg aria2c && \
+    apt-get install -y git make jq curl wget build-essential pkg-config libssl-dev openssl ca-certificates unzip gnupg aria2 net-tools lz4 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -25,7 +25,9 @@ RUN foundryup -v ${FOUNDRY_VERSION}
 
 WORKDIR /app
 
-COPY scripts/base.sh /app/base.sh
-RUN chmod +x /app/base.sh
+COPY scripts/setup/beacond.sh /app/beacond.sh
+COPY scripts/setup/reth.sh /app/reth.sh
+COPY scripts/utils.sh /app/scripts/utils.sh
+RUN chmod +x /app/beacond.sh /app/reth.sh
 
-ENTRYPOINT ["/app/base.sh"]
+ENTRYPOINT ["/bin/sh", "-c" , "/app/beacond.sh && /app/reth.sh"]
