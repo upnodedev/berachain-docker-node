@@ -25,9 +25,8 @@ RUN foundryup -v ${FOUNDRY_VERSION}
 
 WORKDIR /app
 
-COPY scripts/setup/beacond.sh /app/beacond.sh
-COPY scripts/setup/reth.sh /app/reth.sh
+COPY scripts/entrypoints/build.sh /app/build.sh
 COPY scripts/utils.sh /app/scripts/utils.sh
-RUN chmod +x /app/beacond.sh /app/reth.sh
+RUN chmod +x /app/build.sh
 
-ENTRYPOINT ["/bin/sh", "-c" , "/app/beacond.sh && /app/reth.sh"]
+ENTRYPOINT ["/app/build.sh"]
