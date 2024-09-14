@@ -47,4 +47,3 @@ function download() {
 
   aria2c --max-tries=0 -x 16 -s 16 -k100M -d "$dir" -o "$file" "$url"
 }
-

@@ -6,7 +6,7 @@ set -e
 source ./scripts/utils.sh
 
 prepare_beacond() {
-  clone_repo "$REPO_URL" "$TAG" "$BEACOND_REPO_DIR"
+  clone_repo "$BEACON_REPO_URL" "$BEACON_TAG" "$BEACOND_REPO_DIR"
   cd "$BEACOND_REPO_DIR"
 
   if [ ! -f "$BIN_DIR/beacond" ]; then
@@ -48,7 +48,7 @@ handle_snapshot() {
 
   mkdir -p "$BEACOND_SNAPSHOT_TEMP"
   lz4 -dc < "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT" | tar xvf - -C "$BEACOND_SNAPSHOT_TEMP"
-  mv "$BEACOND_SNAPSHOT_TEMP"/data/* "$BEACOND_DATA_DIR"
+  mv "$BEACOND_SNAPSHOT_TEMP"/"$BEACOND_SNAPSHOT_DATADIR_NAME"/* "$BEACOND_DATA_DIR"
 }
 
 prepare_reth() {
@@ -63,7 +63,7 @@ main() {
   if [ ! -e "$BEACOND_READY_FLAG" ]; then
     prepare_beacond
     configure_beacond
-    handle_snapshot
+    [ "$BEACOND_SNAPSHOT_ENABLED" = true ] && handle_snapshot
     touch "$BEACOND_READY_FLAG"
   fi
 
