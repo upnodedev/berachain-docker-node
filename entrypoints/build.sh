@@ -41,7 +41,7 @@ configure_beacond() {
   fi
 }
 
-handle_snapshot() {
+handle_beacond_snapshot() {
   if [ ! -f "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT" ] || [ -f "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT.aria2" ]; then
     download "$BEACOND_SNAPSHOT_URL" "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT"
   fi
@@ -59,16 +59,27 @@ prepare_reth() {
   curl -o "$RETH_INIT_DIR/eth-genesis.json" "$ETH_GENESIS_URL"
 }
 
+handle_reth_snapshot() {
+  if [ ! -f "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" ] || [ -f "$SNAPSHOTS_DIR/$RETH_SNAPSHOT.aria2" ]; then
+    download "$RETH_SNAPSHOT_URL" "$SNAPSHOTS_DIR/$RETH_SNAPSHOT"
+  fi
+
+  mkdir -p "$RETH_SNAPSHOT_TEMP"
+  tar -xzvf "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" -C "$RETH_SNAPSHOT_TEMP"
+  mv "$RETH_SNAPSHOT_TEMP"/"$RETH_SNAPSHOT_DATADIR_NAME"/* "$RETH_INIT_DIR"
+}
+
 main() {
   if [ ! -e "$BEACOND_READY_FLAG" ]; then
     prepare_beacond
     configure_beacond
-    [ "$BEACOND_SNAPSHOT_ENABLED" = true ] && handle_snapshot
+    [ "$BEACOND_SNAPSHOT_ENABLED" = true ] && handle_beacond_snapshot
     touch "$BEACOND_READY_FLAG"
   fi
 
   if [ ! -e "$RETH_READY_FLAG" ]; then
     prepare_reth
+    [ "$RETH_SNAPSHOT_ENABLED" = true ] && handle_reth_snapshot
     touch "$RETH_READY_FLAG"
   fi
 
