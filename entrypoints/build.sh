@@ -65,7 +65,7 @@ handle_reth_snapshot() {
   fi
 
   mkdir -p "$RETH_SNAPSHOT_TEMP"
-  tar -xzvf "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" -C "$RETH_SNAPSHOT_TEMP"
+  lz4 -dc < "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" | tar xvf - -C "$RETH_SNAPSHOT_TEMP"
   mv "$RETH_SNAPSHOT_TEMP"/"$RETH_SNAPSHOT_DATADIR_NAME"/* "$RETH_INIT_DIR"
 }
 
