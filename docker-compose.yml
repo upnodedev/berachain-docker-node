@@ -1,3 +1,4 @@
+version: "3.4"
 services:
   build:
     build:
@@ -28,13 +29,13 @@ services:
       - .env
       - paths.env
     ports:
-      - "3500:3500" # node api
-      - "9091:9090" # grpc
-      - "26660:26660" # prometheus
-      - "1317:1317/tcp" # api
-      - "26650:26656/tcp" # p2p
-      - "26640:26657/tcp" # cometbft rpc
-      - "26658:26658/tcp" # abci app
+      - "${PORT__BEACOND_NODE_API:-3500}:3500"
+      - "${PORT__BEACOND_GRPC:-9090}:9090"
+      - "${PORT__BEACOND_PROMETHEUS:-26660}:26660"
+      - "${PORT__BEACOND_API:-1317}:1317/tcp"
+      - "${PORT__BEACOND_P2P:-26656}:26656/tcp"
+      - "${PORT__BEACOND_COMETBFT_RPC:-26657}:26657/tcp"
+      - "${PORT__BEACOND_ABCI_APP:-26658}:26658/tcp"
     entrypoint: /entrypoints/beacond.sh
     depends_on:
       build:
@@ -59,10 +60,10 @@ services:
       - .env
       - paths.env
     ports:
-      - "8545:8545" # rpc
-      - "7300:6060" # metrics
-      - "30303:30303/udp" # peering
-      - "30303:30303/tcp" # peering
+      - "${PORT__RETH_RPC:-8545}:8545"
+      - "${PORT__RETH_METRICS:-6060}:6060"
+      - "${PORT__RETH_PEERING_UDP:-30303}:30303/udp"
+      - "${PORT__RETH_PEERING_TCP:-30303}:30303/tcp"
     entrypoint: /entrypoints/reth.sh
     depends_on:
       build:
