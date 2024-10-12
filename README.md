@@ -22,3 +22,7 @@ docker compose logs -f --tail 100
 ## Auto snapshots
 
 You can use [bera-snap](https://github.com/upnodedev/snapshotify) for automatic snapshots, either local only or with upload to [GCS](https://cloud.google.com/storage). See README.md for details.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
