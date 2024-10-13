@@ -41,14 +41,34 @@ configure_beacond() {
   fi
 }
 
-handle_beacond_snapshot() {
-  if [ ! -f "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT" ] || [ -f "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT.aria2" ]; then
-    download "$BEACOND_SNAPSHOT_URL" "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT"
+get_latest_snapshot() {
+  local snapshot_type=$1
+  local metadata
+  metadata=$(curl -s "$SNAPSHOT_METADATA_URL")
+  echo "$metadata" | jq -r --arg type "$snapshot_type" '.snapshots | sort_by(.uploadTime) | reverse | map(select(.fileName | contains($type))) | .[0].fileName'
+}
+
+handle_snapshot() {
+  local snapshot_type=$1
+  local snapshot_datadir=$2
+  local snapshot_temp_dir=$3
+  local snapshot_datadir_name=$4
+  local snapshot_full_path
+  local snapshot_file
+  local snapshot_url
+
+  snapshot_full_path=$(get_latest_snapshot "$snapshot_type")
+  snapshot_file=$(basename "$snapshot_full_path")
+  snapshot_url="https://storage.googleapis.com/$snapshot_full_path"
+
+  if [ ! -f "$SNAPSHOTS_DIR/$snapshot_file" ] || [ -f "$SNAPSHOTS_DIR/$snapshot_file.aria2" ]; then
+    download "$snapshot_url" "$SNAPSHOTS_DIR/$snapshot_file"
   fi
 
-  mkdir -p "$BEACOND_SNAPSHOT_TEMP"
-  lz4 -dc < "$SNAPSHOTS_DIR/$BEACOND_SNAPSHOT" | tar xvf - -C "$BEACOND_SNAPSHOT_TEMP"
-  mv "$BEACOND_SNAPSHOT_TEMP"/"$BEACOND_SNAPSHOT_DATADIR_NAME"/* "$BEACOND_DATA_DIR"
+  mkdir -p "$snapshot_temp_dir"
+  lz4 -dc < "$SNAPSHOTS_DIR/$snapshot_file" | tar xvf - -C "$snapshot_temp_dir"
+  mv "$snapshot_temp_dir/$snapshot_datadir_name"/* "$snapshot_datadir"
+  rm -rf "$snapshot_temp_dir"
 }
 
 prepare_reth() {
@@ -59,27 +79,21 @@ prepare_reth() {
   curl -o "$RETH_INIT_DIR/eth-genesis.json" "$ETH_GENESIS_URL"
 }
 
-handle_reth_snapshot() {
-  if [ ! -f "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" ] || [ -f "$SNAPSHOTS_DIR/$RETH_SNAPSHOT.aria2" ]; then
-    download "$RETH_SNAPSHOT_URL" "$SNAPSHOTS_DIR/$RETH_SNAPSHOT"
-  fi
-
-  mkdir -p "$RETH_SNAPSHOT_TEMP"
-  lz4 -dc < "$SNAPSHOTS_DIR/$RETH_SNAPSHOT" | tar xvf - -C "$RETH_SNAPSHOT_TEMP"
-  mv "$RETH_SNAPSHOT_TEMP"/"$RETH_SNAPSHOT_DATADIR_NAME"/* "$RETH_INIT_DIR"
-}
-
 main() {
   if [ ! -e "$BEACOND_READY_FLAG" ]; then
     prepare_beacond
     configure_beacond
-    [ "$BEACOND_SNAPSHOT_ENABLED" = true ] && handle_beacond_snapshot
+    if [ "$BEACOND_SNAPSHOT_ENABLED" = true ]; then
+      handle_snapshot "pruned_snapshot" "$BEACOND_DATA_DIR" "$BEACOND_SNAPSHOT_TEMP" "$BEACOND_SNAPSHOT_DATADIR_NAME"
+    fi
     touch "$BEACOND_READY_FLAG"
   fi
 
   if [ ! -e "$RETH_READY_FLAG" ]; then
     prepare_reth
-    [ "$RETH_SNAPSHOT_ENABLED" = true ] && handle_reth_snapshot
+    if [ "$RETH_SNAPSHOT_ENABLED" = true ]; then
+      handle_snapshot "reth_snapshot" "$RETH_INIT_DIR" "$RETH_SNAPSHOT_TEMP" "$RETH_SNAPSHOT_DATADIR_NAME"
+    fi
     touch "$RETH_READY_FLAG"
   fi
 
