@@ -2,8 +2,8 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV GO_VERSION 1.23.1
-ENV FOUNDRY_VERSION nightly-d663f38be3114ccb94f08fe3b8ea26e27e2043c1
+ENV GO_VERSION=1.23.1
+ENV FOUNDRY_VERSION=nightly-d663f38be3114ccb94f08fe3b8ea26e27e2043c1
 
 RUN apt-get update && \
     apt-get install -y git make jq curl wget build-essential pkg-config libssl-dev openssl ca-certificates unzip gnupg aria2 net-tools lz4 && \
