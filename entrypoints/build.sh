@@ -59,6 +59,13 @@ handle_snapshot() {
 
   snapshot_full_path=$(get_latest_snapshot "$snapshot_type")
   snapshot_file=$(basename "$snapshot_full_path")
+
+  if [ "$SNAPSHOT_SOURCE" = "gcs" ]; then
+    snapshot_url="https://storage.googleapis.com/$snapshot_full_path"
+  else
+    snapshot_url="$SNAPSHOT_METADATA_URL/$snapshot_file"
+  fi
+
   snapshot_url="https://storage.googleapis.com/$snapshot_full_path"
 
   if [ ! -f "$SNAPSHOTS_DIR/$snapshot_file" ] || [ -f "$SNAPSHOTS_DIR/$snapshot_file.aria2" ]; then
