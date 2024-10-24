@@ -66,8 +66,6 @@ handle_snapshot() {
     snapshot_url="$SNAPSHOT_METADATA_URL/$snapshot_file"
   fi
 
-  snapshot_url="https://storage.googleapis.com/$snapshot_full_path"
-
   if [ ! -f "$SNAPSHOTS_DIR/$snapshot_file" ] || [ -f "$SNAPSHOTS_DIR/$snapshot_file.aria2" ]; then
     download "$snapshot_url" "$SNAPSHOTS_DIR/$snapshot_file"
   fi
@@ -76,6 +74,7 @@ handle_snapshot() {
   lz4 -dc < "$SNAPSHOTS_DIR/$snapshot_file" | tar xvf - -C "$snapshot_temp_dir"
   mv "$snapshot_temp_dir/$snapshot_datadir_name"/* "$snapshot_datadir"
   rm -rf "$snapshot_temp_dir"
+  rm -f "$SNAPSHOTS_DIR/$snapshot_file"
 }
 
 prepare_reth() {
