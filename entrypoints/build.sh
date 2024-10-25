@@ -31,7 +31,8 @@ configure_beacond() {
   sed -i "s|^jwt-secret-path = \".*\"|jwt-secret-path = \"$JWT_PATH\"|" "$BEACOND_CONFIG_DIR/app.toml"
 
   seeds=$(curl -s "$SEEDS_URL" | tail -n +2 | tr '\n' ',' | sed 's/,$//')
-  peers=$(curl -s "$PEERS_URL")
+
+  peers=$(curl -s "$PEERS_URL" | jq -r '.peers')
 
   sed -i "s/^seeds = \".*\"/seeds = \"$seeds\"/" "$BEACOND_CONFIG_DIR/config.toml"
   sed -i "s/^persistent_peers = \".*\"/persistent_peers = \"$peers\"/" "$BEACOND_CONFIG_DIR/config.toml"
