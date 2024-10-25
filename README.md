@@ -13,15 +13,31 @@ Sync time ~Xh.
 > [!NOTE]  
 > This repository is under active development. Things may change. Closer to the Berachain mainnet there will be more customizations and support for different ELs.
 
+## Using Snapshots
+
+To avoid waiting for the long sync time, we can use `beacond` & `reth` snapshots. The easiest way is to use Upnode snapshots provided with [bera-snap](https://github.com/upnodedev/bera-snap) tool.
+
+Just set `true` for `BEACOND_SNAPSHOT_ENABLED` and `RETH_SNAPSHOT_ENABLED` in the `.env` file. In this case, snapshots will be downloaded and decompressed automatically.
+
+```bash
+# Beacond
+BEACOND_SNAPSHOT_ENABLED=true
+BEACOND_SNAPSHOT_DATADIR_NAME="data/beacond/data"
+
+# Reth
+RETH_SNAPSHOT_ENABLED=true
+RETH_SNAPSHOT_DATADIR_NAME="data/reth"
+```
+
 ## Logs
 
 ```bash
 docker compose logs -f --tail 100
 ```
 
-## Auto snapshots
+## Auto Snapshots For Your Node
 
-You can use [bera-snap](https://github.com/upnodedev/snapshotify) for automatic snapshots, either local only or with upload to [GCS](https://cloud.google.com/storage). See README.md for details.
+You can use [bera-snap](https://github.com/upnodedev/bera-snap) for automatic node snapshots with configurable scheduling. Supports API access and optional [GCS](https://cloud.google.com/storage) upload. See [docs](https://github.com/upnodedev/bera-snap/blob/main/README.md) for details.
 
 ## License
 
