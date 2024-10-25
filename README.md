@@ -15,28 +15,18 @@ Sync time ~Xh.
 
 ## Using Snapshots
 
-To avoid waiting for the long sync time, we can use `beacond` & reth `snapshots`. The easiest way is to use Upnode snapshots provided with [bera-snap](https://github.com/upnodedev/bera-snap) tool.
+To avoid waiting for the long sync time, we can use `beacond` & `reth` snapshots. The easiest way is to use Upnode snapshots provided with [bera-snap](https://github.com/upnodedev/bera-snap) tool.
 
 Just set `true` for `BEACOND_SNAPSHOT_ENABLED` and `RETH_SNAPSHOT_ENABLED` in the `.env` file. In this case, snapshots will be downloaded and decompressed automatically.
 
 ```bash
-#########################################################################
-#                          ↓ SNAPSHOTS ↓                                #
-#########################################################################
-
-# Snapshot source configuration (bera-snap)
-SNAPSHOT_SOURCE="api" # Possible values: "gcs" or "api"
-# SNAPSHOT_METADATA_URL="https://storage.googleapis.com/yourbucket/berachain/snapshots/metadata.json" # EXAMPLE GCS URL!
-SNAPSHOT_METADATA_URL="http://bera-api.upnode.org/snapshots"
-
 # Beacond
-BEACOND_SNAPSHOT_ENABLED=true # <-- HERE
+BEACOND_SNAPSHOT_ENABLED=true
 BEACOND_SNAPSHOT_DATADIR_NAME="data/beacond/data"
 
 # Reth
-RETH_SNAPSHOT_ENABLED=true # <-- HERE
+RETH_SNAPSHOT_ENABLED=true
 RETH_SNAPSHOT_DATADIR_NAME="data/reth"
-# ...
 ```
 
 ## Logs
