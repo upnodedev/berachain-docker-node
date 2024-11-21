@@ -61,10 +61,6 @@ docker compose logs -f --tail 100
 
 You can use [bera-snap](https://github.com/upnodedev/bera-snap) for automatic node snapshots with configurable scheduling. Supports API access and optional [GCS](https://cloud.google.com/storage) upload. See [docs](https://github.com/upnodedev/bera-snap/blob/main/README.md) for details.
 
-## Quickstart Guide
-
-
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
