@@ -10,6 +10,8 @@ Make sure you have [docker](https://docs.docker.com/)!
 
 Sync time with snapshots is a few hours.
 
+[Quickstart guide](https://bera.upnode.org/berachainv2/docker) or read below.
+
 > [!NOTE]  
 > This repository is under active development. Things may change. Closer to the Berachain mainnet there will be more customizations and support for different ELs.
 
@@ -58,6 +60,10 @@ docker compose logs -f --tail 100
 ## Auto Snapshots For Your Node
 
 You can use [bera-snap](https://github.com/upnodedev/bera-snap) for automatic node snapshots with configurable scheduling. Supports API access and optional [GCS](https://cloud.google.com/storage) upload. See [docs](https://github.com/upnodedev/bera-snap/blob/main/README.md) for details.
+
+## Quickstart Guide
+
+
 
 ## License
 
