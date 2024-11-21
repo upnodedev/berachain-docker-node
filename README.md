@@ -33,7 +33,7 @@ RETH_SNAPSHOT_ENABLED=true
 RETH_SNAPSHOT_DATADIR_NAME="data/reth"
 ```
 
-### Your Custom Snapshots
+### Manual Snapshots
 
 Download and decompress the pruned beacond (pebbledb) and full reth snapshots as described in [Quickstart: Run A Node - Step 4 (Download Snapshot)](https://docs.berachain.com/nodes/quickstart#step-4-download-snapshot-recommended).
 
