@@ -12,6 +12,7 @@ services:
     env_file:
       - .env
       - paths.env
+    stop_grace_period: 120s
 
   beacond:
     image: ubuntu:24.04

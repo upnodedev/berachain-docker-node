@@ -74,6 +74,8 @@ handle_snapshot() {
   mkdir -p "$snapshot_temp_dir"
   lz4 -dc < "$SNAPSHOTS_DIR/$snapshot_file" | tar xvf - -C "$snapshot_temp_dir"
   mv "$snapshot_temp_dir/$snapshot_datadir_name"/* "$snapshot_datadir"
+  sync
+  sleep 5
   rm -rf "$snapshot_temp_dir"
   rm -f "$SNAPSHOTS_DIR/$snapshot_file"
 }
